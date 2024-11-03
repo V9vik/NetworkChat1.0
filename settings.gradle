@@ -1,0 +1,3 @@
+rootProject.name = 'CourserWork'
+include 'Client'
+
