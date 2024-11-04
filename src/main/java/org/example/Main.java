@@ -13,20 +13,11 @@ public class Main {
     public static List<ClientHandler> clientHandlersList = new ArrayList<>();
     private static int port;
     public static void main(String[] args) {
-        File f = new File(pathSettingFile);
-        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
-            port = Integer.parseInt(br.readLine());
-        } catch (FileNotFoundException e) {
-            System.err.println("Файл настроек не найден: " + e.getMessage());
-            return;
-        } catch (IOException e) {
-            System.err.println("Ошибка при чтении файла настроек: " + e.getMessage());
-            return;
-        } catch (NumberFormatException e) {
-            System.err.println("Некорректный формат порта в файле настроек: " + e.getMessage());
+
+        port = parserProt(pathSettingFile);
+        if (port == -1){
             return;
         }
-
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Сервер запущен на порту: " + port);
             while (true) {
@@ -45,6 +36,22 @@ public class Main {
         for(ClientHandler clientHendler : clientHandlersList){
             clientHendler.sendMessage(message);
         }
+    }
+    public static int parserProt(String pathSettingFile){
+        File f = new File(pathSettingFile);
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+            port = Integer.parseInt(br.readLine());
+        } catch (FileNotFoundException e) {
+            System.err.println("Файл настроек не найден: " + e.getMessage());
+            return -1;
+        } catch (IOException e) {
+            System.err.println("Ошибка при чтении файла настроек: " + e.getMessage());
+            return -1;
+        } catch (NumberFormatException e) {
+            System.err.println("Некорректный формат порта в файле настроек: " + e.getMessage());
+            return -1;
+        }
+        return port;
     }
 
 }

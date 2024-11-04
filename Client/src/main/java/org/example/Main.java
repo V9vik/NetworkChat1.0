@@ -12,14 +12,12 @@ public class Main {
     private static String adressServer;
 
     public static void main(String[] args) throws IOException {
-        File f = new File(pathSettingFile);
-        FileReader is = new FileReader(f);
+        port = parserProt(pathSettingFile);
+        if (port == -1){
+            return;
+        }
 
-        BufferedReader br = new BufferedReader(is);
-
-        port = Integer.parseInt(br.readLine());
-
-        adressServer = br.readLine();
+        adressServer = parserAdress(pathSettingFile);
 
         try (Socket socket = new Socket(adressServer, port);
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
@@ -62,4 +60,27 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
+    public static int parserProt(String pathSettingFile){
+        File f = new File(pathSettingFile);
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+            port = Integer.parseInt(br.readLine());
+        } catch (FileNotFoundException e) {
+            System.err.println("Файл настроек не найден: " + e.getMessage());
+            return -1;
+        } catch (IOException e) {
+            System.err.println("Ошибка при чтении файла настроек: " + e.getMessage());
+            return -1;
+        } catch (NumberFormatException e) {
+            System.err.println("Некорректный формат порта в файле настроек: " + e.getMessage());
+            return -1;
+        }
+        return port;
+    }
+    public static String parserAdress(String pathSettingFile) throws IOException {
+        File f = new File(pathSettingFile);
+        BufferedReader br = new BufferedReader(new FileReader(f));
+        adressServer = br.readLine();
+        return adressServer;
+    }
+
 }
