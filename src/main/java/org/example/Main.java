@@ -8,8 +8,8 @@ import java.util.List;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static String pathSettingFile = "/Users/vovamyzikov/IdeaProjects/CourserWork/src/setting_helper/settings.txt";
-    public static String pathLogFile = "/Users/vovamyzikov/IdeaProjects/CourserWork/src/setting_helper/file.log";
+    public static String pathSettingFile = "src/setting_helper/settings.txt";
+    public static String pathLogFile = "src/setting_helper/file.log";
     public static List<ClientHandler> clientHandlersList = new ArrayList<>();
     private static int port;
     public static void main(String[] args) {

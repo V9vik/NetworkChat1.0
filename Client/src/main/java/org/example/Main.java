@@ -6,8 +6,8 @@ import java.net.Socket;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static String pathSettingFile = "/Users/vovamyzikov/IdeaProjects/CourserWork/Client/src/main/setting_helper/settings.txt";
-    public static String pathLogFile = "/Users/vovamyzikov/IdeaProjects/CourserWork/Client/src/main/setting_helper/file.log";
+    public static String pathSettingFile = "Client/src/setting_helper/settings.txt";
+    public static String pathLogFile = "Client/src/setting_helper/file.log";
     private static int port;
     private static String adressServer;
 
@@ -16,9 +16,8 @@ public class Main {
         if (port == -1){
             return;
         }
-
         adressServer = parserAdress(pathSettingFile);
-
+        System.out.println(port + " " + adressServer);
         try (Socket socket = new Socket(adressServer, port);
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -78,8 +77,13 @@ public class Main {
     }
     public static String parserAdress(String pathSettingFile) throws IOException {
         File f = new File(pathSettingFile);
-        BufferedReader br = new BufferedReader(new FileReader(f));
-        adressServer = br.readLine();
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+            br.readLine(); // тк данные со второго
+            adressServer = br.readLine();
+        } catch (IOException e) {
+            System.err.println("Ошибка при чтении адреса сервера: " + e.getMessage());
+            throw e;
+        }
         return adressServer;
     }
 
